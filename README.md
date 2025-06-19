@@ -1,2 +1,2 @@
-# Tarea_4_redes_comunicaciones
+# Tarea_4_social_media
 Tabla gestión de crisis
