@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contenidos Publicitarios - Tienda Gamer Cali</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 2rem 0;
+            background: linear-gradient(45deg, #00efff, #ff2ec4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 5px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .tab {
+            padding: 15px 30px;
+            background: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .tab.active {
+            background: linear-gradient(45deg, #00efff, #ff2ec4);
+            transform: translateY(-2px);
+        }
+        
+        .content {
+            display: none;
+        }
+        
+        .content.active {
+            display: block;
+        }
+        
+        .ad-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 2rem 0;
+        }
+        
+        .ad-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 239, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ad-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 239, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .ad-card:hover::before {
+            left: 100%;
+        }
+        
+        .ad-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 239, 255, 0.3);
+        }
+        
+        .ad-type {
+            color: #00efff;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .ad-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .ad-visual {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            border: 2px solid rgba(0, 239, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ad-visual.reel {
+            background: linear-gradient(45deg, #ff2ec4, #00efff);
+        }
+        
+        .ad-visual.carousel {
+            background: linear-gradient(45deg, #00ff6e, #1c1c1e);
+        }
+        
+        .ad-visual.story {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            height: 300px;
+        }
+        
+        .visual-content {
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+            z-index: 2;
+        }
+        
+        .product-image {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px auto;
+            font-size: 2rem;
+        }
+        
+        .copy-text {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #00efff;
+        }
+        
+        .hashtags {
+            color: #00efff;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        
+        .specs {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+        
+        .cta-button {
+            background: linear-gradient(45deg, #00efff, #ff2ec4);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 239, 255, 0.5);
+        }
+        
+        .rgb-effect {
+            animation: rgbGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes rgbGlow {
+            0% { box-shadow: 0 0 20px rgba(0, 239, 255, 0.5); }
+            100% { box-shadow: 0 0 30px rgba(255, 46, 196, 0.5); }
+        }
+        
+        .audience-tag {
+            display: inline-block;
+            background: rgba(255, 46, 196, 0.2);
+            color: #ff2ec4;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin: 5px 5px 0 0;
+            border: 1px solid rgba(255, 46, 196, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 CONTENIDOS PUBLICITARIOS OPTIMIZADOS</h1>
+            <h2>Tienda Gamer Cali - Meta Ads Campaign</h2>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showContent('perfil-a')">Perfil A - Jugadores Jóvenes</button>
+            <button class="tab" onclick="showContent('perfil-b')">Perfil B - Entusiastas 26-35</button>
+            <button class="tab" onclick="showContent('cross-selling')">Cross-Selling</button>
+        </div>
+        
+        <!-- PERFIL A: JUGADORES JÓVENES -->
+        <div id="perfil-a" class="content active">
+            <h3 style="color: #00efff; margin-bottom: 2rem;">🕹️ AUDIENCIA: Jugadores Jóvenes (18-25 años)</h3>
+            
+            <div class="ad-container">
+                <!-- Instagram Reel - Unboxing Mouse RGB -->
+                <div class="ad-card">
+                    <div class="ad-type">Instagram Reel</div>
+                    <div class="ad-title">🐭 NUEVO MOUSE REDRAGON M808</div>
+                    <div class="audience-tag">Jugadores Jóvenes</div>
+                    <div class="audience-tag">Instagram</div>
+                    
+                    <div class="ad-visual reel rgb-effect">
+                        <div class="visual-content">
+                            <div class="product-image">🖱️</div>
+                            <div>UNBOXING REEL</div>
+                            <div style="font-size: 0.8rem;">12 segundos | RGB Effect</div>
+                        </div>
+                    </div>
+                    
+                    <div class="copy-text">
+                        "🐭 NUEVO MOUSE REDRAGON M808 ¡El RGB que estabas esperando! ¿Listo para subir de nivel? 🎮🔥✨"
+                        <div class="hashtags">#GamerCali #RedragonMouse #RGBGaming #TiendaGamerCali #LevelUp</div>
+                    </div>
+                    
+                    <div class="specs">
+                        <div class="spec-item"><span>Resolución:</span><span>1920x1080</span></div>
+                        <div class="spec-item"><span>Duración:</span><span>≤ 15 segundos</span></div>
+                        <div class="spec-item"><span>Texto:</span><span>≤ 20% del área</span></div>
+                        <div class="spec-item"><span>Música:</span><span>Electrónica libre de royalties</span></div>
+                    </div>
+                    
+                    <button class="cta-button">¡Atrápalo hoy! 🛒</button>
+                </div>
+                
+                <!-- Instagram Story - Challenge -->
+                <div class="ad-card">
+                    <div class="ad-type">Instagram Story</div>
+                    <div class="ad-title">⚡ REACTION TIME CHALLENGE</div>
+                    <div class="audience-tag">Engagement</div>
+                    <div class="audience-tag">Interactive</div>
+                    
+                    <div class="ad-visual story">
+                        <div class="visual-content">
+                            <div class="product-image">⚡</div>
+                            <div>CHALLENGE STORY</div>
+                            <div style="font-size: 0.8rem;">Sticker interactivo</div>
+                        </div>
+                    </div>
+                    
+                    <div class="copy-text">
+                        "⚡💥 CHALLENGE: Muéstranos tu reaction time ⚡ Usa la historia y etiquétanos. El más rápido gana un mousepad RGB GRATIS 🎁"
+                        <div class="hashtags">#ReactionTimeChallenge #FreeGiveaway #GamerSkills</div>
+                    </div>
+                    
+                    <div class="specs">
+                        <div class="spec-item"><span>Resolución:</span><span>1920x1080</span></div>
+                        <div class="spec-item"><span>Duración:</span><span>15 segundos</span></div>
+                        <div class="spec-item"><span>Elementos:</span><span>Sticker countdown + encuesta</span></div>
+                        <div class="spec-item"><span>FOMO:</span><span>Activado</span></div>
+                    </div>
+                    
+                    <button class="cta-button">Participar ahora 🎮</button>
+                </div>
+                
+                <!-- TikTok Style Reel - Gaming Meme -->
+                <div class="ad-card">
+                    <div class="ad-type">Instagram Reel</div>
+                    <div class="ad-title">😂 POV: 60FPS NO ES SUFICIENTE</div>
+                    <div class="audience-tag">Viral Content</div>
+                    <div class="audience-tag">Memes</div>
+                    
+                    <div class="ad-visual reel">
+                        <div class="visual-content">
+                            <div class="product-image">😤</div>
+                            <div>MEME VIRAL</div>
+                            <div style="font-size: 0.8rem;">Trending audio + reaction</div>
+                        </div>
+                    </div>
+                    
+                    <div class="copy-text">
+                        "😤 POV: Cuando tu amigo dice que 60fps es suficiente 🤡💀 Tag a ese amigo que necesita upgrade urgente 🚨"
+                        <div class="hashtags">#GamerMemes #60FPSisNotEnough #UpgradeYourFriend</div>
+                    </div>
+                    
+                    <div class="specs">
+                        <div class="spec-item"><span>Estilo:</span><span>TikTok viral</span></div>
+                        <div class="spec-item"><span>Audio:</span><span>Trending sound</span></div>
+                        <div class="spec-item"><span>Jump cuts:</span><span>Sincronizados</span></div>
+                        <div class="spec-item"><span>CTA:</span><span>Tag amigos</span></div>
+                    </div>
+                    
+                    <button class="cta-button">Upgrade ya! 🔥</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- PERFIL B: ENTUSIASTAS 26-35 -->
+        <div id="perfil-b" class="content">
+            <h3 style="color: #00ff6e; margin-bottom: 2rem;">🎯 AUDIENCIA: Entusiastas 26-35 años</h3>
+            
+            <div class="ad-container">
+                <!-- Facebook Carrusel - RTX 4070 -->
+                <div class="ad-card">
+                    <div class="ad-type">Facebook Carrusel</div>
+                    <div class="ad-title">⚡ RTX 4070 SUPER DISPONIBLE</div>
+                    <div class="audience-tag">Profesionales TI</div>
+                    <div class="audience-tag">Ticket Alto</div>
+                    
+                    <div class="ad-visual carousel">
+                        <div class="visual-content">
+                            <div class="product-image">🎮</div>
+                            <div>CARRUSEL TÉCNICO</div>
+                            <div style="font-size: 0.8rem;">5-7 tarjetas | Benchmarks</div>
+                        </div>
+                    </div>
+                    
+                    <div class="copy-text">
+                        "⚡ RTX 4070 SUPER disponible en Cali. 95 FPS garantizados en 1440p. Stock limitado - 3 años de garantía incluida. 💳📊 Financiación disponible"
+                        <div class="hashtags">#RTX4070 #GamingCali #PCGamer #Benchmarks</div>
+                    </div>
+                    
+                    <div class="specs">
+                        <div class="spec-item"><span>Tarjetas:</span><span>5 (problema-producto-benchmarks-precio-CTA)</span></div>
+                        <div class="spec-item"><span>Fotografía:</span><span>Fondo oscuro texturizado</span></div>
+                        <div class="spec-item"><span>Gráficos:</span><span>FPS comparativos</span></div>
+                        <div class="spec-item"><span>Prueba social:</span><span>Rating 4.9★</span></div>
+                    </div>
+                    
+                    <button class="cta-button">Solicitar asesor 🎯</button>
+                </div>
+                
+                <!-- Facebook Video - Montaje RTX -->
+                <div class="ad-card">
+                    <div class="ad-type">Facebook Video Feed</div>
+                    <div class="ad-title">🔧 MONTAJE PROFESIONAL RTX</div>
+                    <div class="audience-tag">Entusiastas</div>
+                    <div class="audience-tag">Technical</div>
+                    
+                    <div class="ad-visual">
+                        <div class="visual-content">
+                            <div class="product-image">🔧</div>
+                            <div>VIDEO TÉCNICO</div>
+                            <div style="font-size: 0.8rem;">30-45s | Narración profesional</div>
+                        </div>
+                    </div>
+                    
+                    <div class="copy-text">
+                        "🔧 Libera 95 FPS en 1440p con la RTX 5070 Ti. Montaje paso a paso, test bench real y resultados en 3 juegos AAA. Stock limitado en Cali."
+                        <div class="hashtags">#RTX5070Ti #TechReview #BuildGuide</div>
+                    </div>
+                    
+                    <div class="specs">
+                        <div class="spec-item"><span>Duración:</span><span>30-45 segundos</span></div>
+                        <div class="spec-item"><span>Audio:</span><span>Estéreo 48 kHz</span></div>
+                        <div class="spec-item"><span>Tono:</span><span>Profesional y aspiracional</span></div>
+                        <div class="spec-item"><span>Elementos:</span><span>Close-ups + termografía</span></div>
+                    </div>
+                    
+                    <button class="cta-button">Ver benchmarks completos 📊</button>
+                </div>
+                
+                <!-- Lead Ad - Asesoría Personalizada -->
+                <div class="ad-card">
+                    <div class="ad-type">Facebook Lead Ad</div>
+                    <div class="ad-title">🤔 ASESORÍA PERSONALIZADA</div>
+                    <div class="audience-tag">Lead Generation</div>
+                    <div class="audience-tag">Consultoría</div>
+                    
+                    <div class="ad-visual">
+                        <div class="visual-content">
+                            <div class="product-image">🎯</div>
+                            <div>LEAD FORM</div>
+                            <div style="font-size: 0.8rem;">Formulario integrado</div>
+                        </div>
+                    </div>
+                    
+                    <div class="copy-text">
+                        "🤔💭 ¿Confundido con tantas opciones? Nuestros expertos te arman el PC perfecto según tu presupuesto. Asesoría GRATUITA en Cali. Agenda tu cita 📅"
+                        <div class="hashtags">#AsesoriaGratis #PCPersonalizado #ExpertosGaming</div>
+                    </div>
+                    
+                    <div class="specs">
+                        <div class="spec-item"><span>Formulario:</span><span>Nombre, WhatsApp, Presupuesto</span></div>
+                        <div class="spec-item"><span>Pre-fill:</span><span>Datos de Facebook</span></div>
+                        <div class="spec-item"><span>Follow-up:</span><span>WhatsApp automático</span></div>
+                        <div class="spec-item"><span>Incentivo:</span><span>Consulta gratuita</span></div>
+                    </div>
+                    
+                    <button class="cta-button">Agendar consulta gratuita 📅</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CROSS-SELLING -->
+        <div id="cross-selling" class="content">
+            <h3 style="color: #ff6b35; margin-bottom: 2rem;">🛒 ESTRATEGIAS DE CROSS-SELLING</h3>
+            
+            <div class="ad-container">
+                <!-- Bundle Promocional -->
+                <div class="ad-card">
+                    <div class="ad-type">Facebook Carrusel</div>
+                    <div class="ad-title">🎮 COMBO GAMER DEFINITIVO</div>
+                    <div class="audience-tag">Bundle Offer</div>
+                    <div class="audience-tag">Cross-sell</div>
+                    
+                    <div class="ad-visual carousel">
+                        <div class="visual-content">
+                            <div class="product-image">🎁</div>
+                            <div>BUNDLE PACK</div>
+                            <div style="font-size: 0.8rem;">Mouse + Teclado + Headset</div>
+                        </div>
+                    </div>
+                    
+                    <div class="copy-text">
+                        "🎮✨ COMBO GAMER DEFINITIVO: Mouse + Teclado + Headset Logitech G. Ahorra $150.000 comprando el kit completo. Perfecta sincronización RGB 🌈🎯"
+                        <div class="hashtags">#ComboGamer #LogitechG #AhorraEnGrande</div>
+                    </div>
+                    
+                    <div class="specs">
+                        <div class="spec-item"><span>Descuento:</span><span>$150.000 COP</span></div>
+                        <div class="spec-item"><span>Productos:</span><span>3 en 1</span></div>
+                        <div class="spec-item"><span>Sincronización:</span><span>RGB completa</span></div>
+                        <div class="spec-item"><span>Valor agregado:</span><span>Setup cohesivo</span></div>
+                    </div>
+                    
+                    <button class="cta-button">Comprar bundle completo 🎁</button>
+                </div>
+                
+                <!-- Completar Setup -->
+                <div class="ad-card">
+                    <div class="ad-type">Facebook Carrusel</div>
+                    <div class="ad-title">🎯 COMPLETA TU BATTLESTATION</div>
+                    <div class="audience-tag">Upselling</div>
+                    <div class="audience-tag">Accesorios</div>
+                    
+                    <div class="ad-visual">
+                        <div class="visual-content">
+                            <div class="product-image">⚔️</div>
+                            <div>SETUP COMPLETO</div>
+                            <div style="font-size: 0.8rem;">Accesorios esenciales</div>
+                        </div>
+                    </div>
+                    
+                    <div class="copy-text">
+                        "⚔️🎮 COMPLETASTE TU SETUP? Mouse ✅ Teclado ✅ Te faltan: Mousepad XL, soporte audífonos, hub USB. Completa tu battlestation 🏗️💥🎯"
+                        <div class="hashtags">#CompletaTuSetup #Accesorios #Battlestation</div>
+                    </div>
+                    
+                    <div class="specs">
+                        <div class="spec-item"><span>Targeting:</span><span>Clientes recientes</span></div>
+                        <div class="spec-item"><span>Productos:</span><span>Accesorios complementarios</span></div>
+                        <div class="spec-item"><span>Timing:</span><span>7-14 días post-compra</span></div>
+                        <div class="spec-item"><span>Estrategia:</span><span>Checklist visual</span></div>
+                    </div>
+                    
+                    <button class="cta-button">Ver accesorios faltantes 🔍</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showContent(contentId) {
+            // Ocultar todo el contenido
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remover clase active de todos los tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Mostrar contenido seleccionado
+            document.getElementById(contentId).classList.add('active');
+            
+            // Activar tab seleccionado
+            event.target.classList.add('active');
+        }
+        
+        // Animación RGB para elementos
+        function addRGBEffect() {
+            const rgbElements = document.querySelectorAll('.rgb-effect');
+            rgbElements.forEach(element => {
+                element.addEventListener('mouseover', function() {
+                    this.style.animation = 'rgbGlow 0.5s ease-in-out infinite alternate';
+                });
+                element.addEventListener('mouseout', function() {
+                    this.style.animation = 'rgbGlow 2s ease-in-out infinite alternate';
+                });
+            });
+        }
+        
+        // Inicializar efectos
+        document.addEventListener('DOMContentLoaded', addRGBEffect);
+    </script>
+</body>
+</html>

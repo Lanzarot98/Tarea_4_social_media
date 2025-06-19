@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaña Digital - Tienda Gamer Cali</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            overflow: hidden;
+        }
+        
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .slide {
+            display: none; /* Solo esto, sin el flex aquí */
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .slide.active {
+            display: flex; /* Solo cuando está activo muestra flex */
+        }
+        
+        .slide-content {
+            max-width: 1000px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .slide-title {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #00efff, #ff2ec4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+        
+        .slide-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            color: #ccc;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(0, 239, 255, 0.5);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-btn:hover, .nav-btn.active {
+            background: linear-gradient(45deg, #00efff, #ff2ec4);
+            border-color: transparent;
+            transform: scale(1.05);
+        }
+        
+        .slide-number {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 239, 255, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 239, 255, 0.3);
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #00efff;
+            margin-bottom: 10px;
+        }
+        
+        .metric-label {
+            color: #ccc;
+            font-size: 1rem;
+        }
+        
+        .campaign-visual {
+            width: 300px;
+            height: 200px;
+            background: linear-gradient(45deg, #00efff, #ff2ec4);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            font-size: 4rem;
+        }
+        
+        .audience-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 2rem 0;
+        }
+        
+        .audience-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: left;
+        }
+        
+        .audience-title {
+            color: #00efff;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+        
+        .bullet-point {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .bullet-point::before {
+            content: '🎮';
+            position: absolute;
+            left: 0;
+        }
+        
+        .kpi-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+        
+        .kpi-title {
+            color: #00efff;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .kpi-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .kpi-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .budget-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .budget-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .budget-amount {
+            font-size: 1.8rem;
+            color: #00efff;
+            font-weight: bold;
+        }
+        
+        .timeline-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+        
+        .timeline-week {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .week-number {
+            background: linear-gradient(45deg, #00efff, #ff2ec4);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-weight: bold;
+        }
+        
+        .optimization-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 2rem 0;
+        }
+        
+        .optimization-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #00efff;
+        }
+        
+        .optimization-title {
+            color: #00efff;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .result-highlight {
+            background: linear-gradient(45deg, rgba(0, 255, 110, 0.1), rgba(0, 239, 255, 0.1));
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 1px solid rgba(0, 255, 110, 0.3);
+        }
+        
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        
+        <!-- SLIDE 1: PORTADA -->
+        <div class="slide active">
+            <div class="slide-number">1/10</div>
+            <div class="slide-content">
+                <div class="logo">🎮</div>
+                <h1 class="slide-title">CAMPAÑA DIGITAL</h1>
+                <h2 class="slide-subtitle">Tienda Gamer Cali</h2>
+                <div class="campaign-visual">
+                    📱💻🎯
+                </div>
+                <p style="font-size: 1.2rem; color: #ccc;">Estrategia de Marketing Digital en Meta Platforms</p>
+                <p style="font-size: 1rem; color: #888; margin-top: 1rem;">Práctica Simulada - Social Media</p>
+            </div>
+        </div>
+        
+        <!-- SLIDE 2: OBJETIVOS SMART -->
+        <div class="slide">
+            <div class="slide-number">2/10</div>
+            <div class="slide-content">
+                <h1 class="slide-title">🎯 OBJETIVOS SMART</h1>
+                <div class="audience-grid">
+                    <div class="audience-card">
+                        <div class="audience-title">📈 OBJETIVO 1 - Instagram</div>
+                        <div class="bullet-point"><strong>Específico:</strong> Aumentar tasa de interacción</div>
+                        <div class="bullet-point"><strong>Medible:</strong> 20% de incremento</div>
+                        <div class="bullet-point"><strong>Alcanzable:</strong> De 2.8% a 3.4%</div>
+                        <div class="bullet-point"><strong>Relevante:</strong> Construcción de comunidad</div>
+                        <div class="bullet-point"><strong>Temporal:</strong> 8 semanas</div>
+                    </div>
+                    <div class="audience-card">
+                        <div class="audience-title">🖱️ OBJETIVO 2 - Facebook</div>
+                        <div class="bullet-point"><strong>Específico:</strong> Incrementar CTR promedio</div>
+                        <div class="bullet-point"><strong>Medible:</strong> 25% de aumento</div>
+                        <div class="bullet-point"><strong>Alcanzable:</strong> De 1.2% a 1.5%</div>
+                        <div class="bullet-point"><strong>Relevante:</strong> Generación de tráfico</div>
+                        <div class="bullet-point"><strong>Temporal:</strong> 3 meses</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: SEGMENTACIÓN DE AUDIENCIA -->
+        <div class="slide">
+            <div class="slide-number">3/10</div>
+            <div class="slide-content">
+                <h1 class="slide-title">👥 SEGMENTACIÓN DE AUDIENCIA</h1>
+                <div class="audience-grid">
+                    <div class="audience-card">
+                        <div class="audience-title">🕹️ Perfil A - Jugadores Jóvenes</div>
+                        <div class="bullet-point"><strong>Edad:</strong> 18-25 años</div>
+                        <div class="bullet-point"><strong>Ubicación:</strong> Cali y municipios cercanos</div>
+                        <div class="bullet-point"><strong>Intereses:</strong> E-sports, streamers, memes gaming</div>
+                        <div class="bullet-point"><strong>Comportamiento:</strong> Ticket bajo-medio, buscan RGB</div>
+                        <div class="bullet-point"><strong>Plataforma:</strong> Instagram Reels, Stories</div>
+                    </div>
+                    <div class="audience-card">
+                        <div class="audience-title">🎯 Perfil B - Entusiastas 26-35</div>
+                        <div class="bullet-point"><strong>Edad:</strong> 26-35 años</div>
+                        <div class="bullet-point"><strong>Profesión:</strong> TI, diseño, ingeniería</div>
+                        <div class="bullet-point"><strong>Intereses:</strong> Hardware, benchmarks, overclocking</div>
+                        <div class="bullet-point"><strong>Comportamiento:</strong> Ticket alto, buscan rendimiento</div>
+                        <div class="bullet-point"><strong>Plataforma:</strong> Facebook Ads, grupos técnicos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 4: FORMATOS PUBLICITARIOS -->
+        <div class="slide">
+            <div class="slide-number">4/10</div>
+            <div class="slide-content">
+                <h1 class="slide-title">📱 FORMATOS OPTIMIZADOS</h1>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">🎬</div>
+                        <div class="metric-label"><strong>Video Feed/Reels</strong><br>Lanzamientos y unboxings<br>Duración: ≤15s<br>RGB effects</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">📱</div>
+                        <div class="metric-label"><strong>Stories</strong><br>Promociones flash<br>CTA rápido<br>Elementos interactivos</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">🎠</div>
+                        <div class="metric-label"><strong>Carrusel</strong><br>Múltiples productos<br>Máx. 10 tarjetas<br>Storytelling técnico</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">🖼️</div>
+                        <div class="metric-label"><strong>Imagen Única</strong><br>Ofertas específicas<br>1920x1080<br>Texto <20% área</div>
+                    </div>
+                </div>
+                <div class="result-highlight">
+                    <h3 style="color: #00efff; margin-bottom: 1rem;">🎨 Principios de Diseño Meta Blueprint</h3>
+                    <div class="bullet-point">Paleta RGB cian-magenta para Perfil A (jugadores jóvenes)</div>
+                    <div class="bullet-point">Estética dark-mode verde neón para Perfil B (entusiastas)</div>
+                    <div class="bullet-point">Tipografía Montserrat ExtraBold + Poppins para móvil</div>
+                    <div class="bullet-point">Elementos interactivos: stickers, encuestas, countdown</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: PRESUPUESTO -->
+        <div class="slide">
+            <div class="slide-number">5/10</div>
+            <div class="slide-content">
+                <h1 class="slide-title">💰 PRESUPUESTO TOTAL</h1>
+                <div class="result-highlight">
+                    <h2 style="font-size: 3rem; color: #00efff; margin-bottom: 1rem;">$9,110,000 COP</h2>
+                    <p style="font-size: 1.2rem;">Distribución estratégica por objetivo y plataforma</p>
+                </div>
+                <div class="budget-breakdown">
+                    <div class="budget-item">
+                        <div class="budget-amount">$2,520,000</div>
+                        <div>Instagram Ads<br><small>Stories + Feed</small></div>
+                    </div>
+                    <div class="budget-item">
+                        <div class="budget-amount">$4,950,000</div>
+                        <div>Facebook Ads<br><small>Carrusel + Imagen</small></div>
+                    </div>
+                    <div class="budget-item">
+                        <div class="budget-amount">$1,240,000</div>
+                        <div>Producción<br><small>Diseño + Foto</small></div>
+                    </div>
+                    <div class="budget-item">
+                        <div class="budget-amount">$400,000</div>
+                        <div>Fotografía<br><small>2 sesiones profesionales</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 6: CALENDARIO DE PUBLICACIONES -->
+        <div class="slide">
+            <div class="slide-number">6/10</div>
+            <div class="slide-content">
+                <h1 class="slide-title">📅 CALENDARIO ESTRATÉGICO</h1>
+                <div class="timeline-container">
+                    <div class="timeline-week">
+                        <div class="week-number">1-2</div>
+                        <div>
+                            <strong>Lanzamiento de productos</strong><br>
+                            Reels unboxing + Stories interactivas + Carruseles técnicos
+                        </div>
+                    </div>
+                    <div class="timeline-week">
+                        <div class="week-number">3-4</div>
+                        <div>
+                            <strong>Engagement building</strong><br>
+                            Challenges + Tutorials + User Generated Content
+                        </div>
+                    </div>
+                    <div class="timeline-week">
+                        <div class="week-number">5-6</div>
+                        <div>
+                            <strong>Conversión intensiva</strong><br>
+                            Ofertas flash + Bundles + Lead generation
+                        </div>
+                    </div>
+                    <div class="timeline-week">
+                        <div class="week-number">7-8</div>
+                        <div>
+                            <strong>Optimización y cierre</strong><br>
+                            A/B testing + Retargeting + Cross-selling
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 7: KPIs PRINCIPALES -->
+        <div class="slide">
+            <div class="slide-number">7/10</div>
+            <div class="slide-content">
+                <h1 class="slide-title">📊 KPIs PRINCIPALES</h1>
+                <div class="kpi-container">
+                    <div class="kpi-title">Métricas de Engagement (Instagram)</div>
+                    <div class="kpi-list">
+                        <div class="kpi-item">
+                            <span>Alcance objetivo:</span>
+                            <span style="color: #00efff;">50,000 personas</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span>Impresiones meta:</span>
+                            <span style="color: #00efff;">200,000</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span>Engagement Rate:</span>
+                            <span style="color: #00efff;">2.8% → 3.4%</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span>Story Completion:</span>
+                            <span style="color: #00efff;">>70%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="kpi-container">
+                    <div class="kpi-title">Métricas de Conversión (Facebook)</div>
+                    <div class="kpi-list">
+                        <div class="kpi-item">
+                            <span>CTR objetivo:</span>
+                            <span style="color: #ff2ec4;">1.2% → 1.5%</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span>Clics generados:</span>
+                            <span style="color: #ff2ec4;">2,500 mínimo</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span>CPC máximo:</span>
+                            <span style="color: #ff2ec4;">$1,800 COP</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span>Tasa conversión:</span>
+                            <span style="color: #ff2ec4;">8%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 8: IMPLEMENTACIÓN SIMULADA -->
+        <div class="slide">
+            <div class="slide-number">8/10</div>
+            <div class="slide-content">
+                <h1 class="slide-title">⚙️ IMPLEMENTACIÓN SIMULADA</h1>
+                <div class="optimization-grid">
+                    <div class="optimization-card">
+                        <div class="optimization-title">🎯 Configuración Ads Manager</div>
+                        <div class="bullet-point">Campañas por objetivo (Engagement vs Traffic)</div>
+                        <div class="bullet-point">Segmentación por custom audiences</div>
+                        <div class="bullet-point">Presupuesto dinámico por rendimiento</div>
+                        <div class="bullet-point">Pixel de conversión configurado</div>
+                    </div>
+                    <div class="optimization-card">
+                        <div class="optimization-title">📱 Creatividades Optimizadas</div>
+                        <div class="bullet-point">15 anuncios únicos por audiencia</div>
+                        <div class="bullet-point">A/B testing de copy y visuales</div>
+                        <div class="bullet-point">Especificaciones técnicas Meta</div>
+                        <div class="bullet-point">CTA específicos por funnel</div>
+                    </div>
+                    <div class="optimization-card">
+                        <div class="optimization-title">🔄 Optimización Continua</div>
+                        <div class="bullet-point">Monitoreo diario de métricas</div>
+                        <div class="bullet-point">Ajuste de presupuesto por performance</div>
+                        <div class="bullet-point">Pausa de ads con bajo CTR</div>
+                        <div class="bullet-point">Escalado de contenido viral</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 9: GESTIÓN DE CRISIS -->
+        <div class="slide">
+            <div class="slide-number">9/10</div>
+            <div class="slide-content">
+                <h1 class="slide-title">🚨 GESTIÓN DE CRISIS</h1>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value" style="color: #00ff6e;">🟢</div>
+                        <div class="metric-label"><strong>Crisis Leve</strong><br>Respuesta: 2 horas<br>Resolución: 48 horas<br>Ej: Falla producto</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" style="color: #f7931e;">🟡</div>
+                        <div class="metric-label"><strong>Crisis Media</strong><br>Respuesta: 1 hora<br>Resolución: 24 horas<br>Ej: Producto usado</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" style="color: #ff2ec4;">🔴</div>
+                        <div class="metric-label"><strong>Crisis Grave</strong><br>Respuesta: 30 min<br>Resolución: 4 horas<br>Ej: Daño equipo</div>
+                    </div>
+                </div>
+                <div class="result-highlight">
+                    <h3 style="color: #00efff; margin-bottom: 1rem;">KPIs de Crisis Management</h3>
+                    <div class="kpi-list">
+                        <div class="kpi-item">
+                            <span>Sentiment Recovery Rate:</span>
+                            <span>85% positivo post-resolución</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span>Customer Retention:</span>
+                            <span>70% mantienen relación</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 10: RESULTADOS ESPERADOS -->
+        <div class="slide">
+            <div class="slide-number">10/10</div>
+            <div class="slide-content">
+                <h1 class="slide-title">🏆 RESULTADOS ESPERADOS</h1>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">+20%</div>
+                        <div class="metric-label">Engagement Rate<br>Instagram</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">+25%</div>
+                        <div class="metric-label">CTR Promedio<br>Facebook Ads</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">4:1</div>
+                        <div class="metric-label">ROAS<br>Retorno Inversión</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">200</div>
+                        <div class="metric-label">Leads Cualificados<br>Generados</div>
+                    </div>
+                </div>
+                <div class="result-highlight">
+                    <h3 style="color: #00efff; margin-bottom: 1rem;">🎯 Impacto Esperado en el Negocio</h3>
+                    <div class="bullet-point">Incremento del 35% en tráfico web desde redes sociales</div>
+                    <div class="bullet-point">Construcción de comunidad: 5,000+ gamers en Cali</div>
+                    <div class="bullet-point">Posicionamiento como referente gaming en la región</div>
+                    <div class="bullet-point">Base sólida para expansión a otras ciudades</div>
+                </div>
+                <div style="margin-top: 2rem; font-size: 1.2rem; color: #ccc;">
+                    <p>💡 <strong>Estrategia optimizada según Meta Blueprint</strong></p>
+                    <p>📊 <strong>Monitoreo continuo y ajustes basados en data</strong></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Continúo con las demás slides... -->
+        <!-- (El resto del contenido sigue igual) -->
+        
+    </div>
+    
+    <!-- Navegación -->
+    <div class="navigation">
+        <button class="nav-btn active" onclick="goToSlide(0)">1</button>
+        <button class="nav-btn" onclick="goToSlide(1)">2</button>
+        <button class="nav-btn" onclick="goToSlide(2)">3</button>
+        <button class="nav-btn" onclick="goToSlide(3)">4</button>
+        <button class="nav-btn" onclick="goToSlide(4)">5</button>
+        <button class="nav-btn" onclick="goToSlide(5)">6</button>
+        <button class="nav-btn" onclick="goToSlide(6)">7</button>
+        <button class="nav-btn" onclick="goToSlide(7)">8</button>
+        <button class="nav-btn" onclick="goToSlide(8)">9</button>
+        <button class="nav-btn" onclick="goToSlide(9)">10</button>
+        <button class="nav-btn" onclick="previousSlide()">⬅️</button>
+        <button class="nav-btn" onclick="nextSlide()">➡️</button>
+    </div>
+    
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const totalSlides = slides.length;
+        
+        function showSlide(n) {
+            // Remover active de slide actual
+            slides[currentSlide].classList.remove('active');
+            if (navBtns[currentSlide]) {
+                navBtns[currentSlide].classList.remove('active');
+            }
+            
+            // Calcular nuevo slide
+            currentSlide = n;
+            if (currentSlide >= totalSlides) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = totalSlides - 1;
+            
+            // Activar nuevo slide
+            slides[currentSlide].classList.add('active');
+            if (navBtns[currentSlide]) {
+                navBtns[currentSlide].classList.add('active');
+            }
+        }
+        
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+        
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+        
+        function goToSlide(n) {
+            showSlide(n);
+        }
+        
+        // Navegación con teclado
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            } else if (e.key >= '1' && e.key <= '9') {
+                goToSlide(parseInt(e.key) - 1);
+            } else if (e.key === '0') {
+                goToSlide(9);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Crisis de Reputación - Tienda Gamer Cali</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 2rem 0;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+        }
+        
+        .intro {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #ff6b35;
+        }
+        
+        .crisis-table {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .table-header {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            padding: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .crisis-level {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .level-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .level-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .level-card:hover::before {
+            left: 100%;
+        }
+        
+        .leve {
+            border-color: #00ff6e;
+            box-shadow: 0 0 20px rgba(0, 255, 110, 0.2);
+        }
+        
+        .medio {
+            border-color: #f7931e;
+            box-shadow: 0 0 20px rgba(247, 147, 30, 0.2);
+        }
+        
+        .grave {
+            border-color: #ff2ec4;
+            box-shadow: 0 0 20px rgba(255, 46, 196, 0.2);
+        }
+        
+        .level-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .leve .level-title {
+            color: #00ff6e;
+        }
+        
+        .medio .level-title {
+            color: #f7931e;
+        }
+        
+        .grave .level-title {
+            color: #ff2ec4;
+        }
+        
+        .section {
+            margin: 15px 0;
+        }
+        
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .complaint {
+            background: rgba(255, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ff4444;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        
+        .response {
+            background: rgba(0, 255, 110, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #00ff6e;
+            margin: 10px 0;
+        }
+        
+        .process {
+            background: rgba(0, 239, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #00efff;
+            margin: 10px 0;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            padding: 5px;
+        }
+        
+        .step-number {
+            background: linear-gradient(45deg, #00efff, #ff2ec4);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        
+        .timeline {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .priority-high {
+            color: #ff2ec4;
+            font-weight: bold;
+        }
+        
+        .priority-medium {
+            color: #f7931e;
+            font-weight: bold;
+        }
+        
+        .priority-low {
+            color: #00ff6e;
+            font-weight: bold;
+        }
+        
+        .emoji {
+            font-size: 1.2rem;
+            margin-right: 5px;
+        }
+        
+        .kpi-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid rgba(0, 239, 255, 0.3);
+        }
+        
+        .kpi-title {
+            color: #00efff;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 GESTIÓN DE CRISIS DE REPUTACIÓN</h1>
+            <h2>Tienda Gamer Cali - Protocolo de Respuesta</h2>
+        </div>
+        
+        <div class="intro">
+            <h3><span class="emoji">📋</span>Protocolo de Manejo de Crisis</h3>
+            <p>Este protocolo establece los procedimientos para gestionar crisis de reputación en redes sociales, clasificadas por nivel de gravedad y con respuestas específicas para cada escenario.</p>
+        </div>
+        
+        <div class="crisis-table">
+            <div class="table-header">
+                🛡️ MATRIZ DE GESTIÓN DE CRISIS POR NIVELES
+            </div>
+            
+            <div class="crisis-level">
+                <!-- CRISIS LEVE -->
+                <div class="level-card leve">
+                    <div class="level-title">
+                        <span class="emoji">🟢</span>Crisis Leve
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">📝 Ejemplo de Queja</div>
+                        <div class="complaint">
+                            "Compré un teclado ayer y una tecla no funciona bien. Esperaba mejor calidad por el precio que pagué. No sé si fue mala suerte o qué pasó."
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">💬 Respuesta Propuesta</div>
+                        <div class="response">
+                            "¡Hola! Lamentamos mucho esta experiencia. Los productos pueden presentar fallas de fábrica ocasionales y queremos solucionarlo inmediatamente. Te escribimos por mensaje privado para coordinar el cambio del producto. ¡Gracias por confiar en nosotros! 🎮"
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">⚙️ Proceso de Acción</div>
+                        <div class="process">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div>Respuesta pública en menos de 2 horas</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div>Contacto privado vía DM o WhatsApp</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div>Evaluación del producto por equipo técnico</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div>Cambio inmediato si es falla de fábrica</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">5</div>
+                                <div>Follow-up post-solución para confirmar satisfacción</div>
+                            </div>
+                        </div>
+                        <div class="timeline">
+                            <strong>Tiempo de resolución:</strong> <span class="priority-low">24-48 horas</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CRISIS MEDIA -->
+                <div class="level-card medio">
+                    <div class="level-title">
+                        <span class="emoji">🟡</span>Crisis Media
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">📝 Ejemplo de Queja</div>
+                        <div class="complaint">
+                            "PÉSIMO SERVICIO! Me vendieron una GPU 'nueva' que claramente era usada. Tenía polvo por dentro y marcas de uso. Cuando reclamé me dijeron que así venían de fábrica. ESTAFA total. No compren aquí. 😡"
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">💬 Respuesta Propuesta</div>
+                        <div class="response">
+                            "Hola [Nombre], entendemos completamente tu molestia y esta situación no refleja nuestros estándares de calidad. Hemos iniciado una investigación interna inmediata. Te contactamos por mensaje privado para resolver esto personalmente con nuestro gerente. Queremos recuperar tu confianza. 🙏"
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">⚙️ Proceso de Acción</div>
+                        <div class="process">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div>Respuesta pública inmediata (menos de 1 hora)</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div>Escalación a gerencia general</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div>Investigación interna del proceso de almacenamiento</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div>Reembolso completo + compensación (descuento futuro)</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">5</div>
+                                <div>Revisión de protocolos de control de calidad</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">6</div>
+                                <div>Capacitación adicional al equipo de ventas</div>
+                            </div>
+                        </div>
+                        <div class="timeline">
+                            <strong>Tiempo de resolución:</strong> <span class="priority-medium">12-24 horas</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CRISIS GRAVE -->
+                <div class="level-card grave">
+                    <div class="level-title">
+                        <span class="emoji">🔴</span>Crisis Grave
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">📝 Ejemplo de Queja</div>
+                        <div class="complaint">
+                            "ALERTA VIRAL: Tienda Gamer Cali me vendió una fuente de poder que EXPLOTÓ y quemó toda mi PC. Perdí más de $8 millones en componentes. Cuando reclamé se lavaron las manos. EVITEN esta tienda, es peligrosa. #TiendaPeligrosa #PCQuemada"
+                            <br><br><em>📊 Estado: 500+ RT, 200 comentarios negativos, trending local</em>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">💬 Respuesta Propuesta</div>
+                        <div class="response">
+                            "Estamos profundamente preocupados por esta situación. La seguridad de nuestros clientes es nuestra máxima prioridad. Hemos contactado inmediatamente a nuestro seguro y equipo legal para garantizar una resolución completa. Por favor contáctanos de inmediato al [teléfono directo gerencia] para atención personalizada urgente."
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">⚙️ Proceso de Acción</div>
+                        <div class="process">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div>CRISIS ROOM: Activación en menos de 30 minutos</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div>Notificación inmediata a seguro y asesor legal</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div>Declaración oficial preparada por equipo legal</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div>Contacto directo con CEO/Gerente General</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">5</div>
+                                <div>Investigación técnica independiente del producto</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">6</div>
+                                <div>Compensación completa verificada por seguros</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">7</div>
+                                <div>Auditoría completa de proveedores y productos</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">8</div>
+                                <div>Campaña de transparencia y medidas correctivas</div>
+                            </div>
+                        </div>
+                        <div class="timeline">
+                            <strong>Tiempo de resolución:</strong> <span class="priority-high">Inmediato (menos de 4 horas)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- KPIs DE MONITOREO -->
+        <div class="kpi-box">
+            <div class="kpi-title">📊 KPIs de Monitoreo de Crisis</div>
+            <div class="metric">
+                <span><strong>Tiempo de Primera Respuesta:</strong></span>
+                <span>Leve: 2h | Media: 1h | Grave: 30min</span>
+            </div>
+            <div class="metric">
+                <span><strong>Tiempo de Resolución:</strong></span>
+                <span>Leve: 48h | Media: 24h | Grave: 4h</span>
+            </div>
+            <div class="metric">
+                <span><strong>Sentiment Recovery Rate:</strong></span>
+                <span>Meta: 85% positivo post-resolución</span>
+            </div>
+            <div class="metric">
+                <span><strong>Crisis Escalation Prevention:</strong></span>
+                <span>Meta: <90% de crisis contenidas en nivel inicial</span>
+            </div>
+            <div class="metric">
+                <span><strong>Customer Retention Post-Crisis:</strong></span>
+                <span>Meta: 70% de clientes afectados mantienen relación</span>
+            </div>
+            <div class="metric">
+                <span><strong>Brand Mention Recovery:</strong></span>
+                <span>Meta: Retorno a baseline en 72h post-crisis</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
